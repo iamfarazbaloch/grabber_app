@@ -31,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
           style: GoogleFonts.baloo2(
             fontSize: 40,
             fontWeight: FontWeight.bold,
-            color: Colors.green.shade500,
+            color: Color(0xFF0CA201),
           ),
         ),
       ),
