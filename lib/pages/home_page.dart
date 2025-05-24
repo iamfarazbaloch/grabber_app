@@ -9,6 +9,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+//Categories
 Map<String, dynamic> data = {
   'assets/icons/fruits.png': 'Fruits',
   'assets/icons/milk.png': 'Milk & Eggs',
@@ -47,8 +48,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Column(
-        spacing: 20,
+        spacing: 16,
         children: [
+          SizedBox(),
           CustomCard(),
           CategoryItem(),
           Padding(
@@ -103,7 +105,7 @@ class CategoryItem extends StatelessWidget {
                   width: 60,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF2F2F2),
+                    color: Colors.grey.shade100,
                     shape: BoxShape.circle,
                   ),
                   child: Image.asset(imagePath, fit: BoxFit.contain),
