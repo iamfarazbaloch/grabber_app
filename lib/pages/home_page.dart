@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grabber_app/model/products_model.dart';
+import '../providers/products_provider.dart';
 import '../widgets/offer_card.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-//Categories
+// Categories
 Map<String, dynamic> data = {
   'assets/icons/fruits.png': 'Fruits',
   'assets/icons/milk.png': 'Milk & Eggs',
@@ -18,9 +21,11 @@ Map<String, dynamic> data = {
   'assets/icons/veg.png': 'Vegetables',
 };
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final products = ref.watch(productListProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -48,11 +53,11 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Column(
-        spacing: 16,
+        spacing: 20,
         children: [
-          SizedBox(),
-          CustomCard(),
-          CategoryItem(),
+          const SizedBox(),
+          const CustomCard(),
+          const CategoryItem(),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
@@ -77,7 +82,103 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          ProductItem(products: products),
         ],
+      ),
+    );
+  }
+}
+
+class ProductItem extends StatelessWidget {
+  const ProductItem({super.key, required this.products});
+
+  final List<ProductsModel> products;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 14.0),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Stack(
+                      children: [
+                        Image.asset(product.image, fit: BoxFit.contain),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.black,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    product.title,
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Icon(Icons.star, color: Colors.yellow.shade700),
+                      Text(
+                        product.rating,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        product.reviews,
+                        style: TextStyle(color: Colors.black, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    '\$${product.price}',
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

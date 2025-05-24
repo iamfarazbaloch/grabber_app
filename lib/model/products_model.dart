@@ -13,13 +13,3 @@ class ProductsModel {
     required this.price,
   });
 }
-
-List<ProductsModel> produts = [
-  // ProductsModel(
-  //   image: image,
-  //   title: title,
-  //   rating: rating,
-  //   reviews: reviews,
-  //   price: price,
-  // ),
-];
