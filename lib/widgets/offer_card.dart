@@ -43,7 +43,7 @@ class OfferCard extends StatelessWidget {
                 Text(
                   title,
                   style: GoogleFonts.inter(
-                    fontSize: 18,
+                    fontSize: 20,
                     color: titleColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -52,9 +52,9 @@ class OfferCard extends StatelessWidget {
                 Text(
                   subtitle,
                   style: GoogleFonts.inter(
-                    fontSize: 12,
+                    fontSize: 14,
                     color: subtitleColor,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 20),
