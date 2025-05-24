@@ -32,7 +32,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.red,
+        selectedItemColor: Color(0xFF0CA201),
         unselectedItemColor: Colors.grey.shade500,
         showSelectedLabels: true,
         showUnselectedLabels: true,
@@ -50,10 +50,6 @@ class _AppMainScreenState extends State<AppMainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_border_outlined),
             label: 'Favourite',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_outlined),
-            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search_outlined),
