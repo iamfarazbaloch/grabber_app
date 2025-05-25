@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grabber_app/model/products_model.dart';
 import '../providers/products_provider.dart';
+import '../providers/cart_provider.dart';
 import '../widgets/offer_card.dart';
+import 'cart_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -25,6 +27,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final products = ref.watch(productListProvider);
+    final cart = ref.watch(cartProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,15 +48,42 @@ class _HomePageState extends ConsumerState<HomePage> {
             ],
           ),
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 10.0),
-            child: Icon(Icons.shopping_basket_outlined, color: Colors.black),
+        actions: [
+          IconButton(
+            icon: Stack(
+              children: [
+                const Icon(Icons.shopping_basket_outlined, color: Colors.black),
+                if (cart.isNotEmpty)
+                  Positioned(
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '${cart.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartPage()),
+              );
+            },
           ),
         ],
       ),
       body: Column(
-        spacing: 20,
+        spacing: 26,
         children: [
           const SizedBox(),
           const CustomCard(),
@@ -75,7 +105,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   'See all',
                   style: GoogleFonts.inter(
                     fontSize: 18,
-                    color: Color(0xFF0CA201),
+                    color: const Color(0xFF0CA201),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -89,13 +119,12 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 }
 
-class ProductItem extends StatelessWidget {
+class ProductItem extends ConsumerWidget {
   const ProductItem({super.key, required this.products});
-
   final List<ProductsModel> products;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(left: 14.0),
@@ -109,32 +138,50 @@ class ProductItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Stack(
-                      children: [
-                        Image.asset(product.image, fit: BoxFit.contain),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Icon(
-                              Icons.add,
-                              color: Colors.black,
-                              size: 18,
+                  GestureDetector(
+                    onTap: () {
+                      ref.read(cartProvider.notifier).addToCart(product);
+                      ScaffoldMessenger.of(context).clearSnackBars();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${product.title} added to cart'),
+                          backgroundColor: Colors.green,
+                          duration: const Duration(seconds: 1),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          margin: const EdgeInsets.all(16),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Stack(
+                        children: [
+                          Image.asset(product.image, fit: BoxFit.contain),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(
+                                Icons.add,
+                                color: Colors.black,
+                                size: 18,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -152,7 +199,7 @@ class ProductItem extends StatelessWidget {
                       Icon(Icons.star, color: Colors.yellow.shade700),
                       Text(
                         product.rating,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -161,7 +208,10 @@ class ProductItem extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         product.reviews,
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),

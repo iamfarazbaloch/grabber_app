@@ -12,34 +12,34 @@ class AppMainScreen extends StatefulWidget {
   State<AppMainScreen> createState() => _AppMainScreenState();
 }
 
-int currentIndex = 0;
-
-final List<Widget> pages = const [
-  HomePage(),
-  FavoritePage(),
-  SearchPage(),
-  ProfilePage(),
-  MenuPage(),
-];
-
 class _AppMainScreenState extends State<AppMainScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _pages = const [
+    HomePage(),
+    FavoritePage(),
+    SearchPage(),
+    ProfilePage(),
+    MenuPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: currentIndex, children: pages),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
-        elevation: 4,
-        currentIndex: currentIndex,
+        elevation: 6,
+        currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: Color(0xFF0CA201),
+        selectedItemColor: const Color(0xFF0CA201),
         unselectedItemColor: Colors.grey.shade500,
         showSelectedLabels: true,
         showUnselectedLabels: true,
         iconSize: 30,
-        onTap: (value) {
+        onTap: (index) {
           setState(() {
-            currentIndex = value;
+            _currentIndex = index;
           });
         },
         items: const [
