@@ -3,7 +3,8 @@ class ProductsModel {
   final String title;
   final String rating;
   final String reviews;
-  final String price;
+  final double price;
+  int quantity;
 
   ProductsModel({
     required this.image,
@@ -11,5 +12,6 @@ class ProductsModel {
     required this.rating,
     required this.reviews,
     required this.price,
+    this.quantity = 1,
   });
 }
