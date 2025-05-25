@@ -16,7 +16,16 @@ class CartPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const Text('My Cart', style: TextStyle(color: Colors.black)),
+        centerTitle: true,
+        title: const Text(
+          'My Cart',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.5,
+          ),
+        ),
         backgroundColor: Colors.white,
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.black),
